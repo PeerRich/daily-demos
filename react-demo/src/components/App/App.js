@@ -8,6 +8,17 @@ import CallObjectContext from "../../CallObjectContext";
 import { roomUrlFromPageUrl, pageUrlFromRoomUrl } from "../../urlUtils";
 import DailyIframe from "@daily-co/daily-js";
 import { logDailyEvent } from "../../logUtils";
+import BottomAppBar from "../BottomAppBar";
+import Paper from "@material-ui/core/Paper";
+import EmojiPicker from "../EmojiPicker";
+import HomeScreen from "../HomeScreen";
+import EmptyScreen from "../EmptyScreen";
+import Channel from "../Channel";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Divider from "@material-ui/core/Divider";
+import AddToHomeScreenDialog from "../AddToHomeScreenDialog";
+import Hidden from "@material-ui/core/Hidden";
 
 const STATE_IDLE = "STATE_IDLE";
 const STATE_CREATING = "STATE_CREATING";
@@ -176,6 +187,41 @@ export default function App() {
 
   return (
     <div className="app">
+      <div className="wrapper">
+        <Hidden smUp>
+          <div className="hidden-standalone">
+            <AddToHomeScreenDialog />
+          </div>
+        </Hidden>
+        <Paper className="app">
+          <div style={{width: "100%", height: "100%"}}>
+            <div className="content">
+              <div>
+                {inChannel ?
+                  isEmpty ? <EmptyScreen/>
+                    : <Channel/>
+                  : <HomeScreen/>
+                }
+              </div>
+            </div>
+          </div>
+          <div className="channels">
+            <div className="bottomAppBarWrapper">
+              <BottomAppBar/>
+            </div>
+            <div className="EmojiPickerWrapper">
+              <Divider/>
+              <Tabs variant="fullWidth"
+                    indicatorColor="primary"
+                    textColor="primary">
+                <Tab label="Global"/>
+                <Tab label="Local"/>
+              </Tabs>
+              <EmojiPicker/>
+            </div>
+          </div>
+        </Paper>
+      </div>
       {showCall ? (
         // NOTE: for an app this size, it's not obvious that using a Context
         // is the best choice. But for larger apps with deeply-nested components
